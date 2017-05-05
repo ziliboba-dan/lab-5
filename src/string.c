@@ -29,36 +29,43 @@ int sspn(const char *str, const char *sym)
 	return 0;
 }
 
-char *strtok_r(char *s1, const char *s2, char **lasts) {
-	char *ret;
-	if (s1 == NULL)
-	s1 = *lasts;
-	while(*s1 && strchr(s2, *s1))
-		++s1;
-	if(*s1 == '\0')
+char *str_stok = NULL;
+
+char *get_str_stok()
+{
+	return str_stok;
+}
+
+void set_str_stok(char *str)
+{
+	str_stok = str;
+}
+
+char *stok(char *str, const char *delim)
+{
+	if (str != NULL) {
+		str_stok = str;
+	}
+	if (str_stok == NULL) {
 		return NULL;
-	ret = s1;
-	while(*s1 && !strchr(s2, *s1))
-		++s1;
-	if(*s1)
-		*s1++ = '\0';
-	*lasts = s1;
-	return ret;
-}
-
-char *strchr(register const char *s, int c) {
-	do {
-		if (*s == c) {
-			return (char*)s;
+	}
+	for (int i = 0; str_stok[i] != 0; i++) {
+		for (int j = 0; delim[j] != 0; j++) {
+			if (str_stok[i] == delim[j]) {
+				str_stok[i] = 0;
+				char *result = str_stok;
+				str_stok = str_stok + i + 1;
+				return result;
+			}
 		}
-	} while (*s++);
-	return 0;
-}
-
-char *stok( char * string, const char * delim){
-	static char *lasts;
-	
-	return strtok_r(string, delim, &lasts);	
+	}
+	if (str_stok != NULL) {
+		char *result = str_stok;
+		str_stok = NULL;
+		return result;
+	} else {
+		return NULL;
+	}
 }
 
 int scmp(const char *string1, const char *string2) 

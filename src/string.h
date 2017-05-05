@@ -5,16 +5,16 @@
 
 char *scpy(char *destptr, const char *srcptr);
 
-char * strtok_r(char *s1, const char *s2, char **lasts);
-
-char * stok( char * string, const char * delim);
+char *stok(char *str, const char *delim);
 
 int slen(const char *str);
 
 int sspn(const char *str, const char *symb);
 
-char * strchr (register const char *s, int c);
-
 int scmp(const char *string1, const char *string2); 
+
+char *get_str_stok();
+
+void set_str_stok(char *str);
 
 #endif

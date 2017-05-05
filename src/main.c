@@ -10,6 +10,10 @@ int check(char *str)
 		printf("Wrong start ip or domen name\n");
 		return 1;
 	}
+	if ((str[2] == '\\')) {
+		printf("Wrong start ip or domen name\n");
+		return 1;
+	}
 	if (sspn(str, "*?<>|/") > 0) {
 		printf("Wrong symbol #%d\n", sspn(str, "*?<>|/"));
 		return 1;
@@ -21,7 +25,7 @@ int check(char *str)
 		i++;
 		j++;
 	}
-	//printf("%s\n", buf);
+	printf("%s\n", buf);
 
 	//Проверка на допустимость айпи и домена 
 	char *tpr = stok(buf, ".");
@@ -38,7 +42,7 @@ int check(char *str)
 		while (tpr != NULL) {
 			printf("%s\n", tpr);
 			if (n > 4) {
-				printf("Wrong ip\n");
+				printf("Wrong ip number\n");
 				return 1;
 			}
 			if (atoi(tpr) > 255) {
@@ -88,12 +92,12 @@ void process(char *pch, const char *delim)
 	char *str = stok(pch, delim);
 	while (str != NULL) {
 		printf("%s\n", str);
+		char *stok_tmp = get_str_stok();
 		if (check(str) == 1) {
 			return;
 		}
-		else printf("TWO%s\n", str);
+		set_str_stok(stok_tmp);
 		str = stok(NULL, delim);
-		printf("%d\n", str);
 	}
 		
 }
