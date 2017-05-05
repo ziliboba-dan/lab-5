@@ -77,3 +77,17 @@ int scmp(const char *string1, const char *string2)
 	}
 	return 0;
 }
+
+char *scat( char *destptr, const char *srcptr)
+{
+	int p = 0;
+	int i = slen(destptr);
+	while (srcptr[p] != 0)
+	{
+		destptr[i] = srcptr[p];
+		i++;
+		p++;
+	}
+	destptr[i] = 0;
+	return destptr;
+}

@@ -3,9 +3,43 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+void newpath(char *str)
+{	
+	char *buf = malloc(sizeof(char)*slen(str));
+	int j = 0;
+	int check = 0;
+	for(int i = 2; i < slen(str); i++) {
+		if (str[i] == '\\') {
+			if (check == 0) {
+				buf[j] = ':';
+				j++;
+				buf[j] = '/';
+				check = 1;
+				j++;
+			}
+			else {
+				buf[j] = '/';
+				j++;
+			}
+		}
+		else {
+			buf[j] = str[i];
+			j++;
+		}
+	}
+	scpy(str, buf);	
+	free(buf);
+
+}
+
 int check(char *str)
 {
 	char *buf = malloc(sizeof(char)*slen(str));
+
+	if (slen(str) >= MAX_PATH) {
+		printf("Wrong size path\n");
+		return 1;
+	}
 	if ((str[0] != '\\') || (str[1] != '\\')) {
 		printf("Wrong start ip or domen name\n");
 		return 1;
@@ -25,7 +59,7 @@ int check(char *str)
 		i++;
 		j++;
 	}
-	printf("%s\n", buf);
+	//printf("%s\n", buf);
 
 	//Проверка на допустимость айпи и домена 
 	char *tpr = stok(buf, ".");
@@ -40,7 +74,7 @@ int check(char *str)
 	char domen[3];
 	if (prov == 0) {
 		while (tpr != NULL) {
-			printf("%s\n", tpr);
+			//printf("%s\n", tpr);
 			if (n > 4) {
 				printf("Wrong ip number\n");
 				return 1;
@@ -59,8 +93,7 @@ int check(char *str)
 	}	
 	else {
 		while (tpr != NULL) {
-			printf("%s\n", tpr);
-			//if ()
+			//printf("%s\n", tpr);
 			if (p > 4) {
 				printf("Wrong domen number\n");
 				return 1;
@@ -73,7 +106,7 @@ int check(char *str)
 			printf("Error domen\n");
 			return 1;
 		}
-		printf("%s\n", domen);
+		//printf("%s\n", domen);
 		if (scmp(domen, "com") && scmp(domen, "org") && scmp(domen, "ru")) {
 			printf("Wrong domen name\n");
 			return 1;
@@ -85,39 +118,54 @@ int check(char *str)
 
 void process(char *pch, const char *delim)
 {
-	if (slen(pch) >= 260) {
-		printf("Wrong size path\n");
-		return;
-	}
+	char *result = malloc(sizeof(char) * slen(pch));
 	char *str = stok(pch, delim);
 	while (str != NULL) {
-		printf("%s\n", str);
+		//printf("%s\n", str);
 		char *stok_tmp = get_str_stok();
-		if (check(str) == 1) {
-			return;
+		int pl = check(str);
+		if (pl == 1) {
+			printf("error\n");
+		}
+		else {
+			newpath(str);
+			//printf("%s\n", str);
+			scat(result, str);
 		}
 		set_str_stok(stok_tmp);
 		str = stok(NULL, delim);
+		if (str != NULL) {
+			scat(result, "+");
+		}
 	}
-		
+	//printf("R%s\n", result);
+	scpy(pch, result);
+	free(result);	
 }
 
-void output()
+void output(const char *pch)
 {
+	printf("new paths: %s\n", pch);
 
+}
 
+void input(char *pch, char* delim)
+{
+	printf("delim: ");
+	scanf("%s", delim);
+	printf("paths: ");
+	scanf("%s", pch);
 }
 
 int main()
 {
-	printf("delim: ");
 	char delim[10];
-	scanf("%s", delim);
-	char pch[300];
-	scanf("%s", pch);	
-	printf("%d\n", slen(pch));
+	char pch[300];	
 
+	input(pch, delim);
 	process(pch, delim);
+
+	output(pch);
 	return 0;
 }
 
